@@ -1,0 +1,65 @@
+﻿@model Test_App.Models.EmployeeViewModel
+
+@{
+    ViewData["Title"] = Model.Employee.Id > 0 ? "Edit Employee" : "Create Employee";
+    ViewData["SaveUpdate"] = Model.Employee.Id > 0 ? "Update" : "Save";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @if (Model.Employee.Id>0)
+    {
+            <input type="hidden" asp-for="@Model.Employee.Id" />
+    }
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Employee.FirstName)
+        @Html.TextBoxFor(model => model.Employee.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Employee.FirstName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Employee.LastName)
+        @Html.TextBoxFor(model=>model.Employee.LastName,new {@class="form-control"})
+        @Html.ValidationMessageFor(model => model.Employee.LastName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Employee.DOB"></label>
+        <input asp-for="@Model.Employee.DOB" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="@Model.Employee.DOB" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Employee.Gender)
+        @Html.DropDownListFor(model => model.Employee.Gender, new List<SelectListItem>
+    {
+    new SelectListItem { Text = "Male", Value = "Male" },
+    new SelectListItem { Text = "Female", Value = "Female" }
+    }, "Select Gender", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Employee.Gender, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label>Projects</label>
+        @foreach (var project in Model.Projects)
+        {
+            <div>
+                <input type="checkbox" name="selectedProjects" value="@project.Value"
+                @(Model.Employee.EmployeeProjects.Any(ep => ep.ProjectId.ToString() == project.Value) ? "checked" : "") />
+                <span>@project.Text</span>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success">@ViewData["SaveUpdate"]</button>
+    <a href="@Url.Action("Index", "Employee")" class="btn btn-secondary">Cancel</a>
+}
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

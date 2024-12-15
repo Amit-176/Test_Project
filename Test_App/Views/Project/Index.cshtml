@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Test_App.Models.Project>
+
+<h2>Projects</h2>
+<a href="@Url.Action("Upsert")" class="btn btn-primary">Add New Project</a>
+@if (Model.Count() > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Employees</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                    <td>@project.StartDate.ToShortDateString()</td>
+                    <td>@project.EndDate.ToShortDateString()</td>
+                    <td>
+                        @foreach (var employee in project.EmployeeProjects.Select(ep => ep.Employee))
+                        {
+                            <span class="badge bg-secondary">@employee.FirstName @employee.LastName</span>
+
+                            <br />
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Upsert", new { id = project.Id })" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Delete", new { id = project.Id })" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-danger">No Project Found</p>
+}

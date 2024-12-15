@@ -1,0 +1,18 @@
+﻿@model Test_App.Models.Project
+
+@{
+    ViewData["Title"] = "Delete Project";
+}
+
+<h1>Delete Project</h1>
+
+<h3>Are you sure you want to delete the employee @Model.Name</h3>
+
+<div>
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="@Url.Action("Index", "Project")" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

@@ -1,0 +1,18 @@
+﻿@model Test_App.Models.Employee
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<h1>Delete Employee</h1>
+
+<h3>Are you sure you want to delete the employee @Model.FirstName @Model.LastName?</h3>
+
+<div>
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="@Url.Action("Index", "Employee")" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
